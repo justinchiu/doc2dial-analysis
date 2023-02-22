@@ -8,13 +8,17 @@ with Path("doc2dial_dial_train.json").open() as f:
 with Path("doc2dial_doc.json").open() as f:
     docs = json.load(f)
 
-dmv_keys = list(dials["dial_data"]["dmv"].keys())
+domain = st.radio("Domain", dials["dial_data"].keys())
 
-key1 = dmv_keys[0]
-dmv1_dials = dials["dial_data"]["dmv"][key1]
-dmv1_doc = docs["doc_data"]["dmv"][key1]
+keys = list(dials["dial_data"][domain].keys())
 
-dial = dmv1_dials[0]
+example_num = st.number_input("Example number", min_value=0, max_value=len(keys), value=0)
+
+key1 = keys[example_num]
+dom1_dials = dials["dial_data"][domain][key1]
+dom1_doc = docs["doc_data"][domain][key1]
+
+dial = dom1_dials[example_num]
 turns = dial["turns"]
 for turn in turns:
     speaker = turn["role"]
@@ -23,8 +27,13 @@ for turn in turns:
     utterance = turn["utterance"]
 
     st.write(utterance)
-    for reference in references:
-        st.write(reference["sp_id"])
+    st.write([reference["sp_id"] for reference in references])
+
+with st.sidebar:
+    st.write("Doc")
+    for span_id, span in dom1_doc["spans"].items():
+        st.write(span_id)
+        st.write(span["text_sp"])
 
 def doc_dial_lengths(dials, docs):
     dial_lens = []

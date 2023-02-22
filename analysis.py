@@ -56,6 +56,7 @@ def doc_dial_lengths(dials, docs):
 
     print(np.min(dial_lens), np.mean(dial_lens), np.max(dial_lens))
     print(np.min(doc_lens), np.mean(doc_lens), np.max(doc_lens))
+    print(np.percentile(doc_lens, 90))
 
 
 doc_dial_lengths(dials["dial_data"], docs["doc_data"])
